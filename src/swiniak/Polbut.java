@@ -17,6 +17,6 @@ public class Polbut extends But {
 	
 	public Polbut(String model,String model2,String material,String materialPodszewki,String kolor,String materialPodeszwy,int iloscPar){
 		super(model,model2,material,materialPodszewki,kolor,materialPodeszwy,iloscPar);
-		typObuwia="туфли женские";
+		typObuwia="półbut damski/ туфли женские";
 	}
 }

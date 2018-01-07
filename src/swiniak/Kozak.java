@@ -16,6 +16,6 @@ public class Kozak extends But {
 	
 	public Kozak(String model,String model2,String material,String materialPodszewki,String kolor,String materialPodeszwy,int iloscPar){
 		super(model,model2,material,materialPodszewki,kolor,materialPodeszwy,iloscPar);
-		typObuwia="Женские сапоги";
+		typObuwia="kozak damski/ Женские сапоги";
 	}
 }

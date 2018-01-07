@@ -1,13 +1,10 @@
 package swiniak;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-
-import javax.swing.JButton;
 
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.util.Units;
@@ -18,32 +15,23 @@ import org.apache.poi.xwpf.usermodel.XWPFRun;
 public class Drukuj {
 
 	
+	public static But[] buty=new But[Okienko.iloscZamowien];
+
 	public Drukuj(){
-		
-
-           
-				
-
+		long start=System.currentTimeMillis();
 				Okienko.pobierzDate();
+
 				
 				
-				//iloscZamowien=4;
 				
-				//nrKlienta=25;  // uzytkownik ma podac nr klienta!
-				
-				Opcje op=new Opcje();
 				//Okno o= new Okno();
-				But[] buty=new But[Okienko.iloscZamowien];
+			//	But[] buty=new But[Okienko.iloscZamowien];
 				int l=0;
 				
-				for(int i=0;i<Okienko.iloscKozakow;i++){
-					if(KozakPanel.TabMaterialKozaka[i]=="Welur")
-						KozakPanel.TabMaterialKozaka[i]="welurporusku";
-					
-				}
 				
 				
 					if(Okienko.iloscKozakow>0){
+						
 						for(;l<Okienko.iloscKozakow;l++){
 						
 							buty[l]=new Kozak(KozakPanel.TabModelKozaka[l],KozakPanel.TabModelKozaka2[l],KozakPanel.TabMaterialKozaka[l],KozakPanel.TabMaterialPodszewkiKozaka[l],KozakPanel.TabKolorKozaka[l],"полимерный материал",KozakPanel.TabParyKozaka[l]);
@@ -62,32 +50,26 @@ public class Drukuj {
 					
 					if(Okienko.iloscSandalow>0){
 						for(int po=0;po<Okienko.iloscSandalow;po++,l++){
-							buty[l]=new Polbut(SandalPanel.TabModelSandala[po],SandalPanel.TabModelSandala2[po],SandalPanel.TabMaterialSandala[po],SandalPanel.TabMaterialPodszewkiSandala[po],SandalPanel.TabkolorSandala[po],"полимерный материал",SandalPanel.TabParySandala[po]);
+							buty[l]=new Sandal(SandalPanel.TabModelSandala[po],SandalPanel.TabModelSandala2[po],SandalPanel.TabMaterialSandala[po],SandalPanel.TabMaterialPodszewkiSandala[po],SandalPanel.TabkolorSandala[po],"полимерный материал",SandalPanel.TabParySandala[po]);
 						}
 						
 					}
 					
 					if(Okienko.iloscBotkow>0){
 						for(int po=0;po<Okienko.iloscBotkow;po++,l++){
-							buty[l]=new Botek(BotekPanel.TabModelBotka[po],BotekPanel.TabModelBotka2[po],BotekPanel.TabMaterialPolbuta[po],BotekPanel.TabMaterialPodszewkiPolbuta[po],BotekPanel.TabkolorBotka[po],"полимерный материал",BotekPanel.TabParyPolbuta[po]);
+							System.out.println(BotekPanel.TabModelBotka[po]); //dodalem tu narazie dynamiczna liste 
+							buty[l]=new Botek(BotekPanel.TabModelBotka[po],BotekPanel.TabModelBotka2[po],BotekPanel.TabMaterialBotka[po],BotekPanel.TabMaterialPodszewkiBotka[po],BotekPanel.TabkolorBotka[po],"полимерный материал",BotekPanel.TabParyBotka[po]);
+							System.out.println("dupa2" +Okienko.iloscBotkow);
 						}
 						
 					}
 					
+					//zmiana jezyka tekstu z polskiego na rosyjski
+					Tlumacz.tlumaczenieMaterialu();
+					Tlumacz.tlumaczenieMaterialuPodszewki();
+					Tlumacz.tlumaczenieKoloru();
 					
-				
-				for(int i=0;i<Okienko.iloscZamowien;i++){
-					System.out.println(buty[i].iloscPar);
-				}
-				
-					
-					
-				
-				
-				
-				
-				
-				
+			
 				//przyporzadkowywanie ilosci par do pojedynczego zamowienia buta
 				Pary[] par=new Pary[Okienko.iloscZamowien];
 				for(int j=0;j<Okienko.iloscZamowien;j++){
@@ -96,24 +78,24 @@ public class Drukuj {
 				
 				
 				
+				
 				try {
 					
-					//C:/Users/Matson/Desktop/swiniak/etykieta-jednostkowa-
-					//InputStream plik2=new InputStream("nowy.docx");
+					
 					FileOutputStream plik=new FileOutputStream("etykieta-jednostkowa-"+Okienko.nrKlienta+".doc");
 					XWPFDocument doc=new XWPFDocument();
 					XWPFParagraph para=doc.createParagraph();
 					
-		            String imgFile="obraz.jpg";
-		            
-		            
+		             String imgFile=("obraz.jpg");
+		          
+		           
 		                for(int j=0;j<Okienko.iloscZamowien;j++){
 		                	for(int i=0;i<buty[j].iloscPar;i++){
 			
 		                	XWPFRun paraRun=para.createRun();
 		        			paraRun.setBold(true);
 		        			paraRun.setFontSize(12);
-		                	paraRun.setText("Модель:"+buty[j].model+"|"+buty[j].model2+"           ");
+		                	paraRun.setText("Модель: "+buty[j].model+"|"+buty[j].model2+"            ");
 		                    int format=XWPFDocument.PICTURE_TYPE_JPEG;
 		                    paraRun.addPicture(new FileInputStream(imgFile), format, imgFile, Units.toEMU(28), Units.toEMU(13));
 		        			paraRun.addBreak();
@@ -198,16 +180,17 @@ public class Drukuj {
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
-				} catch (InvalidFormatException e1) {
+				} catch (InvalidFormatException e) {
 					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
+					e.printStackTrace();
+				} 
 				
-				
+				long stop=System.currentTimeMillis();
+				System.out.println("Czas wykonania:"+(stop-start));
 				
 			}
 		
-		
+	
 		
 		
 		
