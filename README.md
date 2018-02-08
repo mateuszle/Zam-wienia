@@ -12,6 +12,7 @@ Należy włączyć plik Zamówienia.jar
 ### Zbudowane z 
 
 * Eclipse
+* Java Swing
 * Apache POI - biblioteka Javy dla dokumentów Microsoftowych 
 
 ### Skąd ten projekt? 
